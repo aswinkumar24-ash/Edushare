@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduShare - Add New Material</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3f37c9;
+            --accent: #4895ef;
+            --dark: #1b263b;
+            --light: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7ff;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, var(--dark) 0%, #0d1b2a 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 280px;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+            border-radius: 8px;
+            padding: 12px 20px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: rgba(67, 97, 238, 0.2);
+            color: white;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 12px;
+            width: 20px;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+        }
+        
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+            border: none;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .preview-image {
+            width: 100px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .condition-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .condition-badge.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar d-none d-md-block p-0">
+                <div class="p-3 text-center">
+                    <h4 class="text-white"><i class="fas fa-book-open me-2"></i><span class="d-none d-lg-inline">EduShare</span></h4>
+                </div>
+                <ul class="nav flex-column px-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="Edu-Share.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="add_material.html">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Add Material</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my_materials.html">
+                            <i class="fas fa-book"></i>
+                            <span>My Materials</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="marketplace.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Marketplace</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="auction.html">
+                            <i class="fas fa-gavel"></i>
+                            <span>Auctions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="exchanges.html">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Exchanges</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <a class="nav-link" href="Edu-share_login.html">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h4 class="fw-bold">Add New Material</h4>
+                        <p class="text-muted">List your study materials to sell or exchange</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <img src="images/pic.jpg" alt="User" class="rounded-circle me-2" width="40" height="40">
+                        <span class="fw-bold">AK</span>
+                    </div>
+                </div>
+                
+                <!-- Form Card -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Material Type</label>
+                                    <select class="form-select">
+                                        <option selected disabled>Select type</option>
+                                        <option>Textbook</option>
+                                        <option>Guide</option>
+                                        <option>Notes</option>
+                                        <option>Question Bank</option>
+                                        <option>Solved Papers</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Subject/Category</label>
+                                    <select class="form-select">
+                                        <option selected disabled>Select subject</option>
+                                        <option>Mathematics</option>
+                                        <option>Physics</option>
+                                        <option>Chemistry</option>
+                                        <option>Biology</option>
+                                        <option>History</option>
+                                        <option>Geography</option>
+                                        <option>Economics</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label class="form-label">Title</label>
+                                    <input type="text" class="form-control" placeholder="e.g. NCERT Physics Class 12">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Author/Publisher</label>
+                                    <input type="text" class="form-control" placeholder="e.g. R.D. Sharma">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" rows="3" placeholder="Describe the material, any highlights, etc."></textarea>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Condition</label>
+                                    <div class="d-flex gap-2">
+                                        <span class="condition-badge active">New</span>
+                                        <span class="condition-badge">Like New</span>
+                                        <span class="condition-badge">Good</span>
+                                        <span class="condition-badge">Fair</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Price (₹)</label>
+                                    <input type="number" class="form-control" placeholder="Enter amount">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Listing Type</label>
+                                    <select class="form-select">
+                                        <option>Fixed Price</option>
+                                        <option>Auction</option>
+                                        <option>Exchange Only</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label">Upload Images</label>
+                                <div class="upload-area">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <h5>Drag & Drop Images Here</h5>
+                                    <p class="text-muted">or click to browse files (max 5 images)</p>
+                                    <input type="file" id="materialImages" multiple accept="image/*" style="display: none;">
+                                </div>
+                                <div class="d-flex flex-wrap mt-3" id="imagePreviews">
+                                    <!-- Image previews will appear here -->
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-outline-secondary me-2">Cancel</button>
+                                <button type="submit" class="btn btn-primary">List Material</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Tips Card -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-lightbulb me-2 text-warning"></i> Listing Tips</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item border-0 ps-0"><small>Use clear, well-lit photos showing the cover and important pages</small></li>
+                            <li class="list-group-item border-0 ps-0"><small>Mention any highlights or annotations in the description</small></li>
+                            <li class="list-group-item border-0 ps-0"><small>Price competitively - check similar listings for reference</small></li>
+                            <li class="list-group-item border-0 ps-0"><small>For auctions, set a reasonable starting price</small></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Condition badge selection
+        document.querySelectorAll('.condition-badge').forEach(badge => {
+            badge.addEventListener('click', function() {
+                document.querySelectorAll('.condition-badge').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Image upload preview
+        const uploadArea = document.querySelector('.upload-area');
+        const fileInput = document.getElementById('materialImages');
+        const imagePreviews = document.getElementById('imagePreviews');
+        
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', function() {
+            imagePreviews.innerHTML = '';
+            
+            if (this.files.length > 5) {
+                alert('Maximum 5 images allowed');
+                return;
+            }
+            
+            Array.from(this.files).forEach(file => {
+                if (!file.type.match('image.*')) return;
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('preview-image');
+                    imagePreviews.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+        
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--primary)';
+            uploadArea.style.backgroundColor = 'rgba(67, 97, 238, 0.05)';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#dee2e6';
+            uploadArea.style.backgroundColor = 'transparent';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#dee2e6';
+            uploadArea.style.backgroundColor = 'transparent';
+            
+            fileInput.files = e.dataTransfer.files;
+            const event = new Event('change');
+            fileInput.dispatchEvent(event);
+        });
+    </script>
+</body>
+</html>

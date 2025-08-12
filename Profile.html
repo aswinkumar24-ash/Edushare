@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | EduShare</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --dark-color: #1b263b;
+            --light-color: #f8f9fa;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --danger-color: #f72585;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: #333;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, var(--dark-color) 0%, #0d1b2a 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+            border-radius: 8px;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: rgba(67, 97, 238, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link:hover::before, .sidebar .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--accent-color);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+        }
+        
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: white;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+            padding: 15px 20px;
+            border-radius: 12px 12px 0 0 !important;
+        }
+        
+        .user-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--primary-color);
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logout-btn {
+            background: rgba(247, 37, 133, 0.1);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(247, 37, 133, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .logout-btn i {
+            margin-right: 10px;
+        }
+        
+        .logo-container {
+            padding: 0 20px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon {
+            background: var(--accent-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .edit-profile-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .badge-primary {
+            background-color: var(--primary-color);
+        }
+
+        /* Modal Custom Styles */
+        .modal-header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(72, 149, 239, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar d-none d-md-block p-0">
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <span>EduShare</span>
+                    </div>
+                </div>
+                <ul class="nav flex-column px-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="Edu-Share.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my_materials.html">
+                            <i class="fas fa-book"></i>
+                            <span>My Materials</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="marketplace.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Marketplace</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="auction.html">
+                            <i class="fas fa-gavel"></i>
+                            <span>Auctions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="exchanges.html">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Exchanges</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="community.html">
+                            <i class="fas fa-comments"></i>
+                            <span>Community</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="Profile.html">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Logout Section -->
+                <div class="sidebar-footer">
+                    <button class="logout-btn" onclick="window.location.href='Edu-share_login.html'">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <!-- Top Navbar -->
+                <nav class="navbar navbar-expand-lg mb-4">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="d-flex align-items-center">
+                            <div class="position-relative me-3">
+                                <i class="fas fa-bell text-muted fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    3
+                                </span>
+                            </div>
+                            <div class="position-relative me-3">
+                                <i class="fas fa-envelope text-muted fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                    5
+                                </span>
+                            </div>
+                            <img src="images/pic.jpg" alt="User" class="user-avatar me-2" style="width: 42px; height: 42px;">
+                            <span class="fw-bold">AK</span>
+                        </div>  
+                    </div>
+                </nav>
+                
+                <!-- Profile Header -->
+                <div class="card mb-4">
+                    <div class="card-body text-center position-relative">
+                        <button class="btn btn-primary edit-profile-btn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="fas fa-edit me-1"></i> Edit Profile
+                        </button>
+                        <img src="images/pic.jpg" alt="Profile" class="user-avatar mb-3">
+                        <h4 class="mb-1">AK</h4>
+                        <p class="text-muted mb-3">Chennai, India</p>
+                        <span class="badge badge-primary mb-3">Premium Member</span>
+                        
+                        <!-- Updated Stats Section to match reference image -->
+                        <div class="profile-stats">
+                            <div>
+                                <div class="stat-value">24</div>
+                                <div class="stat-label">Materials Listed</div>
+                            </div>
+                            <div>
+                                <div class="stat-value">18</div>
+                                <div class="stat-label">Materials Sold</div>
+                            </div>
+                            <div>
+                                <div class="stat-value">3,450</div>
+                                <div class="stat-label">Total Earnings</div>
+                            </div>
+                            <div>
+                                <div class="stat-value">5</div>
+                                <div class="stat-label">Active Auctions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Tabs -->
+                <ul class="nav nav-tabs mb-4" id="profileTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity" type="button" role="tab">Activity</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="materials-tab" data-bs-toggle="tab" data-bs-target="#materials" type="button" role="tab">Materials</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">Reviews</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab">Account Settings</button>
+                    </li>
+                </ul>
+                
+                <!-- Tab Content -->
+                <div class="tab-content" id="profileTabContent">
+                    <!-- Activity Tab -->
+                    <div class="tab-pane fade show active" id="activity" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                Recent Activity
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex mb-4">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-bookmark text-primary fs-4"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6>Added new material</h6>
+                                        <p class="text-muted small mb-1">JEE Advanced Physics Guide</p>
+                                        <p class="text-muted small">Today, 9:30 AM</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex mb-4">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-check-circle text-success fs-4"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6>Completed transaction</h6>
+                                        <p class="text-muted small mb-1">Sold NEET Biology Notes to Priya M. for ₹450</p>
+                                        <p class="text-muted small">Yesterday, 4:30 PM</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex mb-4">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-comment text-info fs-4"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6>Posted in community</h6>
+                                        <p class="text-muted small mb-1">"Looking for good UPSC Polity books recommendations"</p>
+                                        <p class="text-muted small">Mar 14, 2023</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <button class="btn btn-outline-primary">View All Activity</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Materials Tab -->
+                    <div class="tab-pane fade" id="materials" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span>Your Materials</span>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-secondary active">All</button>
+                                    <button class="btn btn-sm btn-outline-secondary">For Sale</button>
+                                    <button class="btn btn-sm btn-outline-secondary">Sold</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Material</th>
+                                                <th>Status</th>
+                                                <th>Price</th>
+                                                <th>Views</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="images/jee_phy.jpg" style="width: 40px; height: 50px; object-fit: cover; border-radius: 4px;" class="me-3">
+                                                        <span>JEE Advanced Physics Guide</span>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-success">Sold</span></td>
+                                                <td>₹500</td>
+                                                <td>124</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">Details</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="images/neet_bio.webp" style="width: 40px; height: 50px; object-fit: cover; border-radius: 4px;" class="me-3">
+                                                        <span>NEET Biology Notes</span>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-warning text-dark">Auction</span></td>
+                                                <td>₹450 (Current Bid)</td>
+                                                <td>87</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">Manage</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="images/upsc_history.jpg" style="width: 40px; height: 50px; object-fit: cover; border-radius: 4px;" class="me-3">
+                                                        <span>UPSC History Book</span>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-info">Exchange</span></td>
+                                                <td>-</td>
+                                                <td>56</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">Respond</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reviews Tab -->
+                    <div class="tab-pane fade" id="reviews" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                Your Reviews
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex mb-4">
+                                    <img src="https://ui-avatars.com/api/?name=Rahul+K&background=3f37c9&color=fff" style="width: 50px; height: 50px; border-radius: 50%;" class="me-3">
+                                    <div>
+                                        <div class="d-flex justify-content-between">
+                                            <h6>Rahul K.</h6>
+                                            <div class="text-warning">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                        </div>
+                                        <p class="mb-1">Great seller! The JEE Physics Guide was exactly as described.</p>
+                                        <p class="text-muted small">Mar 10, 2023</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex mb-4">
+                                    <img src="https://ui-avatars.com/api/?name=Neha+P&background=f72585&color=fff" style="width: 50px; height: 50px; border-radius: 50%;" class="me-3">
+                                    <div>
+                                        <div class="d-flex justify-content-between">
+                                            <h6>Neha P.</h6>
+                                            <div class="text-warning">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="far fa-star"></i>
+                                            </div>
+                                        </div>
+                                        <p class="mb-1">Notes were helpful but took longer to arrive than expected.</p>
+                                        <p class="text-muted small">Feb 28, 2023</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <button class="btn btn-outline-primary">View All Reviews</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Settings Tab -->
+                    <div class="tab-pane fade" id="settings" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header">
+                                Account Settings
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" value="AK">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" value="ak@example.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" class="form-control" value="Chennai, India">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Bio</label>
+                                        <textarea class="form-control" rows="3">JEE and NEET educator with 5 years of experience. Sharing my curated study materials.</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Change Password</label>
+                                        <input type="password" class="form-control" placeholder="New Password">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" value="A">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" value="K">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Profile Photo</label>
+                            <div class="d-flex align-items-center">
+                                <img src="images/pic.jpg" alt="Profile" class="user-avatar me-3" style="width: 80px; height: 80px;">
+                                <div>
+                                    <input type="file" class="form-control" id="profilePhoto">
+                                    <small class="text-muted">Recommended size: 200x200 pixels</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" value="ak@example.com">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control" value="Chennai, India">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Bio</label>
+                            <textarea class="form-control" rows="3">JEE and NEET educator with 5 years of experience. Sharing my curated study materials.</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Social Links</label>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text"><i class="fab fa-linkedin"></i></span>
+                                <input type="text" class="form-control" placeholder="LinkedIn URL">
+                            </div>
+                            <div class="input-group mb-2">
+                                <span class="input-group-text"><i class="fab fa-twitter"></i></span>
+                                <input type="text" class="form-control" placeholder="Twitter URL">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fab fa-github"></i></span>
+                                <input type="text" class="form-control" placeholder="GitHub URL">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+        
+        // Image preview for profile photo upload
+        document.getElementById('profilePhoto').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.querySelector('.modal-body .user-avatar').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

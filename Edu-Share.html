@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduShare - Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --dark-color: #1b263b;
+            --light-color: #f8f9fa;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --danger-color: #f72585;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: #333;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, var(--dark-color) 0%, #0d1b2a 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+            border-radius: 8px;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: rgba(67, 97, 238, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link:hover::before, .sidebar .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--accent-color);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+        }
+        
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: white;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+            padding: 15px 20px;
+            border-radius: 12px 12px 0 0 !important;
+        }
+        
+        .stat-card {
+            border-left: 5px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 0 12px 0 0;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+        
+        .stat-card .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .badge-primary {
+            background-color: var(--primary-color);
+        }
+        
+        .badge-success {
+            background-color: var(--success-color);
+        }
+        
+        .badge-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .badge-danger {
+            background-color: var(--danger-color);
+        }
+        
+        .material-img {
+            width: 70px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .material-img:hover {
+            transform: scale(1.05);
+        }
+        
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            color: #6c757d;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            padding: 15px 25px;
+        }
+        
+        .search-box {
+            border-radius: 50px;
+            padding-left: 20px;
+            border: 1px solid #e0e0e0;
+            height: 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            object-fit: cover;
+        }
+        
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logout-btn {
+            background: rgba(247, 37, 133, 0.1);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(247, 37, 133, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .logout-btn i {
+            margin-right: 10px;
+        }
+        
+        .logo-container {
+            padding: 0 20px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon {
+            background: var(--accent-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        .activity-item {
+            border-left: 3px solid var(--primary-color);
+            padding-left: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            border-left-width: 5px;
+            padding-left: 20px;
+        }
+        
+        /* Quick Actions Styles */
+        .quick-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none !important;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .quick-action-btn i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Popular Materials Section Enhancements */
+        .popular-materials-section {
+            background-color: #f9faff;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .popular-material-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .popular-material-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.15);
+        }
+        
+        .popular-material-card .card-img-container {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .popular-material-card .card-img-top {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .popular-material-card:hover .card-img-top {
+            transform: scale(1.1);
+        }
+        
+        .popular-material-card .price-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary-color);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            z-index: 2;
+        }
+        
+        .popular-material-card .card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .popular-material-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark-color);
+        }
+        
+        .popular-material-card .card-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .popular-material-card .card-footer {
+            background: transparent;
+            border-top: none;
+            padding: 0 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .material-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 50px;
+        }
+        
+        .view-all-btn {
+            background: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            font-weight: 500;
+            padding: 8px 20px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .view-all-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                overflow: hidden;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .logo span {
+                display: none;
+            }
+            
+            .popular-material-card .card-img-container {
+                height: 180px;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .popular-material-card .card-img-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar d-none d-md-block p-0">
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <span>EduShare</span>
+                    </div>
+                </div>
+                <ul class="nav flex-column px-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my_materials.html">
+                            <i class="fas fa-book"></i>
+                            <span>My Materials</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="marketplace.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Marketplace</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="auction.html">
+                            <i class="fas fa-gavel"></i>
+                            <span>Auctions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="exchanges.html">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Exchanges</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="community.html">
+                            <i class="fas fa-comments"></i>
+                            <span>Community</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Profile.html">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Logout Section -->
+                <div class="sidebar-footer">
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <!-- Top Navbar -->
+                <nav class="navbar navbar-expand-lg mb-4">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="d-flex align-items-center">
+                            <div class="position-relative me-3">
+                                <i class="fas fa-bell text-muted fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    3
+                                </span>
+                            </div>
+                            <div class="position-relative me-3">
+                                <i class="fas fa-envelope text-muted fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                    5
+                                </span>
+                            </div>
+                            <img src="images/pic.jpg" alt="User" class="user-avatar me-2">
+                            <span class="fw-bold">Ak</span>
+                        </div>  
+                    </div>
+                </nav>
+                
+                <!-- Dashboard Content -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <h4 class="fw-bold">Welcome back, Ak!</h4>
+                        <p class="text-muted">Here's what's happening with your EduShare account today.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control search-box" placeholder="Search materials...">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card stat-card h-100">
+                            <div class="card-body">
+                                <div class="stat-value">24</div>
+                                <div class="stat-label">Materials Listed</div>
+                                <i class="fas fa-book float-end mt-3" style="color: rgba(67, 97, 238, 0.2); font-size: 2.5rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card h-100">
+                            <div class="card-body">
+                                <div class="stat-value">18</div>
+                                <div class="stat-label">Materials Sold</div>
+                                <i class="fas fa-rupee-sign float-end mt-3" style="color: rgba(76, 201, 240, 0.2); font-size: 2.5rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card h-100">
+                            <div class="card-body">
+                                <div class="stat-value">₹3,450</div>
+                                <div class="stat-label">Total Earnings</div>
+                                <i class="fas fa-wallet float-end mt-3" style="color: rgba(248, 150, 30, 0.2); font-size: 2.5rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card h-100">
+                            <div class="card-body">
+                                <div class="stat-value">5</div>
+                                <div class="stat-label">Active Auctions</div>
+                                <i class="fas fa-gavel float-end mt-3" style="color: rgba(247, 37, 133, 0.2); font-size: 2.5rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity and Quick Actions -->
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span>Recent Activity</span>
+                                <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="activity-item">
+                                    <div class="d-flex align-items-start">
+                                        <img src="images/jee_phy.jpg" class="material-img me-3">
+                                        <div class="flex-grow-1">
+                                            <strong>JEE Advanced Physics Guide</strong>
+                                            <div class="text-muted small mb-2">Sold to Rahul K.</div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="badge bg-success">Completed</span>
+                                                <span class="text-muted small">Today, 10:45 AM</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="d-flex align-items-start">
+                                        <img src="images/neet_notes.jpg" class="material-img me-3">
+                                        <div class="flex-grow-1">
+                                            <strong>NEET Biology Notes</strong>
+                                            <div class="text-muted small mb-2">New bid ₹450 by Priya M.</div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="badge bg-warning text-dark">Auction</span>
+                                                <span class="text-muted small">Yesterday, 4:30 PM</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="activity-item">
+                                    <div class="d-flex align-items-start">
+                                        <img src="images/upsc_history.jpg" class="material-img me-3">
+                                        <div class="flex-grow-1">
+                                            <strong>UPSC History Book</strong>
+                                            <div class="text-muted small mb-2">Exchange request from Amit S.</div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="badge bg-info">Pending</span>
+                                                <span class="text-muted small">Mar 12, 2023</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                Quick Actions
+                            </div>
+                            <div class="card-body">
+                                <a href="add_material.html" class="btn btn-primary quick-action-btn">
+                                    <i class="fas fa-plus-circle"></i> Add New Material
+                                </a>
+                                <a href="marketplace.html" class="btn btn-outline-secondary quick-action-btn">
+                                    <i class="fas fa-search"></i> Browse Marketplace
+                                </a>
+                                <a href="auction.html" class="btn btn-outline-secondary quick-action-btn">
+                                    <i class="fas fa-gavel"></i> Start Auction
+                                </a>
+                                <a href="exchanges.html" class="btn btn-outline-secondary quick-action-btn">
+                                    <i class="fas fa-exchange-alt"></i> Request Exchange
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Popular Materials Section -->
+                <div class="popular-materials-section">
+                    <div class="section-title">
+                        <span>Popular in Marketplace</span>
+                        <a href="marketplace.html" class="view-all-btn">View All <i class="fas fa-arrow-right ms-2"></i></a>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3 mb-4">
+                            <div class="card popular-material-card">
+                                <div class="card-img-container">
+                                    <div class="price-tag">₹250</div>
+                                    <img src="images/jee_maths.jpg" class="card-img-top" alt="JEE Mathematics">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">JEE Main Mathematics</h5>
+                                    <p class="card-text">By R.D. Sharma - Comprehensive guide for JEE aspirants</p>
+                                </div>
+                                <div class="card-footer">
+                                    <span class="material-badge bg-success">Like New</span>
+                                    <button class="btn btn-sm btn-primary">View</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 mb-4">
+                            <div class="card popular-material-card">
+                                <div class="card-img-container">
+                                    <div class="price-tag">₹180</div>
+                                    <img src="images/neet_bio.webp" class="card-img-top" alt="NEET Biology Notes">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">NEET Biology Notes</h5>
+                                    <p class="card-text">2023 Edition - Complete syllabus coverage</p>
+                                </div>
+                                <div class="card-footer">
+                                    <span class="material-badge bg-warning text-dark">Auction</span>
+                                    <button class="btn btn-sm btn-primary">Bid</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 mb-4">
+                            <div class="card popular-material-card">
+                                <div class="card-img-container">
+                                    <div class="price-tag">₹300</div>
+                                    <img src="images/upsc_his_books.webp" class="card-img-top" alt="UPSC History Book">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">UPSC History Book</h5>
+                                    <p class="card-text">NCERT Based - Ancient to Modern History</p>
+                                </div>
+                                <div class="card-footer">
+                                    <span class="material-badge bg-info">Exchange</span>
+                                    <button class="btn btn-sm btn-primary">Offer</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3 mb-4">
+                            <div class="card popular-material-card">
+                                <div class="card-img-container">
+                                    <div class="price-tag">₹200</div>
+                                    <img src="images/physics_12th.jpg" class="card-img-top" alt="Class 12 Physics">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Class 12 Physics</h5>
+                                    <p class="card-text">CBSE Syllabus - With solved examples</p>
+                                </div>
+                                <div class="card-footer">
+                                    <span class="material-badge bg-success">New</span>
+                                    <button class="btn btn-sm btn-primary">Buy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript for logout functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Logout button functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                // In a real application, you might want to:
+                // 1. Send a logout request to the server
+                // 2. Clear any session data or tokens
+                // 3. Then redirect to login page
+                
+                // For this demo, we'll just redirect
+                window.location.href = 'Edu-Share_login.html';
+            });
+        });
+    </script>
+</body>
+</html>

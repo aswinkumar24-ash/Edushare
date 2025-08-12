@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduShare - Auctions</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --dark-color: #1b263b;
+            --light-color: #f8f9fa;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --danger-color: #f72585;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: #333;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, var(--dark-color) 0%, #0d1b2a 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+            border-radius: 8px;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: rgba(67, 97, 238, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link:hover::before, .sidebar .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--accent-color);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+        }
+        
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: white;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+            padding: 15px 20px;
+            border-radius: 12px 12px 0 0 !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .search-box {
+            border-radius: 50px;
+            padding-left: 20px;
+            border: 1px solid #e0e0e0;
+            height: 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            object-fit: cover;
+        }
+        
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logout-btn {
+            background: rgba(247, 37, 133, 0.1);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(247, 37, 133, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .logo-container {
+            padding: 0 20px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon {
+            background: var(--accent-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        /* Auction Specific Styles */
+        .auction-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .auction-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.15);
+        }
+        
+        .auction-card .card-img-container {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .auction-card .card-img-top {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .auction-card:hover .card-img-top {
+            transform: scale(1.1);
+        }
+        
+        .auction-card .timer-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--danger-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 15px rgba(247, 37, 133, 0.3);
+            z-index: 2;
+        }
+        
+        .auction-card .card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .auction-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark-color);
+        }
+        
+        .auction-card .card-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .auction-card .card-footer {
+            background: transparent;
+            border-top: none;
+            padding: 0 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .auction-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 50px;
+        }
+        
+        .view-all-btn {
+            background: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            font-weight: 500;
+            padding: 8px 20px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .view-all-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .auction-price {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+        
+        .btn-bid {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-bid:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 15px 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark-color);
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                overflow: hidden;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .logo span {
+                display: none;
+            }
+            
+            .auction-card .card-img-container {
+                height: 180px;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .auction-card .card-img-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar d-none d-md-block p-0">
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <span>EduShare</span>
+                    </div>
+                </div>
+                <ul class="nav flex-column px-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="Edu-Share.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my_materials.html">
+                            <i class="fas fa-book"></i>
+                            <span>My Materials</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="marketplace.html">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Marketplace</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-gavel"></i>
+                            <span>Auctions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="exchanges.html">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Exchanges</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="community.html">
+                            <i class="fas fa-comments"></i>
+                            <span>Community</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Logout Section -->
+                <div class="sidebar-footer">
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <!-- Top Navbar -->
+                <nav class="navbar navbar-expand-lg mb-4">
+                    <div class="container-fluid">
+                        <div class="d-flex align-items-center">
+                            <div class="position-relative me-3">
+                                <i class="fas fa-bell text-muted fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    3
+                                </span>
+                            </div>
+                            <div class="position-relative me-3">
+                                <i class="fas fa-envelope text-muted fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                    5
+                                </span>
+                            </div>
+                            <img src="images/pic.jpg" alt="User" class="user-avatar me-2">
+                            <span class="fw-bold">Ak</span>
+                        </div>  
+                    </div>
+                </nav>
+                
+                <!-- Page Heading -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h1 class="h3 mb-0 text-gray-800 fw-bold">Auctions</h1>
+                        <p class="text-muted">Browse and bid on educational materials from other students</p>
+                    </div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAuctionModal">
+                        <i class="fas fa-plus me-2"></i>Create New Auction
+                    </button>
+                </div>
+                
+                <!-- Search and Filter -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control search-box" placeholder="Search auctions...">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select">
+                            <option selected>Filter by category</option>
+                            <option>Textbooks</option>
+                            <option>Lecture Notes</option>
+                            <option>Study Guides</option>
+                            <option>Research Papers</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Auction List -->
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="card auction-card h-100">
+                            <div class="card-img-container">
+                                <img src="images/calculas.png" class="card-img-top" alt="Advanced Calculus">
+                                <span class="timer-tag"><i class="fas fa-clock me-1"></i>2d 4h left</span>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Advanced Calculus Textbook</h5>
+                                <p class="card-text">Hardcover edition in excellent condition with minimal highlighting. Includes all chapters.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                    <div>
+                                        <span class="auction-badge bg-primary"><i class="fas fa-user me-1"></i>JohnDoe123</span>
+                                        <span class="auction-badge bg-warning text-dark ms-2"><i class="fas fa-star me-1"></i>4.8</span>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="auction-price">₹750.00</div>
+                                        <small class="text-muted">Current bid</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-bid w-100">Place Bid</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="card auction-card h-100">
+                            <div class="card-img-container">
+                                <img src="images/ORGANICCHEMISTRY.webp" class="card-img-top" alt="Organic Chemistry">
+                                <span class="timer-tag"><i class="fas fa-clock me-1"></i>1d 12h left</span>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Organic Chemistry Notes</h5>
+                                <p class="card-text">Comprehensive notes from CHEM 301, including diagrams and reaction mechanisms.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                    <div>
+                                        <span class="auction-badge bg-primary"><i class="fas fa-user me-1"></i>BioMajor2023</span>
+                                        <span class="auction-badge bg-warning text-dark ms-2"><i class="fas fa-star me-1"></i>4.9</span>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="auction-price">₹375.00</div>
+                                        <small class="text-muted">Current bid</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-bid w-100">Place Bid</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="card auction-card h-100">
+                            <div class="card-img-container">
+                                <img src="images/python.jpg" class="card-img-top" alt="Python Programming">
+                                <span class="timer-tag"><i class="fas fa-clock me-1"></i>3d 6h left</span>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Python Programming Guide</h5>
+                                <p class="card-text">Complete guide with exercises and solutions. Perfect for CS 101 students.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                    <div>
+                                        <span class="auction-badge bg-primary"><i class="fas fa-user me-1"></i>CodeMaster</span>
+                                        <span class="auction-badge bg-warning text-dark ms-2"><i class="fas fa-star me-1"></i>4.7</span>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="auction-price">₹915.00</div>
+                                        <small class="text-muted">Current bid</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-bid w-100">Place Bid</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="card auction-card h-100">
+                            <div class="card-img-container">
+                                <img src="images/businesseco.jpg" class="card-img-top" alt="Economics Study">
+                                <span class="timer-tag"><i class="fas fa-clock me-1"></i>5h 23m left</span>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Economics Study Package</h5>
+                                <p class="card-text">Includes textbook, summary sheets, and practice exams with solutions.</p>
+                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                    <div>
+                                        <span class="auction-badge bg-primary"><i class="fas fa-user me-1"></i>EconGuru</span>
+                                        <span class="auction-badge bg-warning text-dark ms-2"><i class="fas fa-star me-1"></i>4.5</span>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="auction-price">₹395.00</div>
+                                        <small class="text-muted">Current bid</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-bid w-100">Place Bid</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Auction Modal -->
+    <div class="modal fade" id="createAuctionModal" tabindex="-1" aria-labelledby="createAuctionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createAuctionModalLabel">Create New Auction</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="auctionForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="auctionTitle" class="form-label">Title</label>
+                                <input type="text" class="form-control" id="auctionTitle" placeholder="e.g., Advanced Calculus Textbook" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="auctionCategory" class="form-label">Category</label>
+                                <select class="form-select" id="auctionCategory" required>
+                                    <option value="" selected disabled>Select category</option>
+                                    <option value="Textbooks">Textbooks</option>
+                                    <option value="Lecture Notes">Lecture Notes</option>
+                                    <option value="Study Guides">Study Guides</option>
+                                    <option value="Research Papers">Research Papers</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="auctionDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="auctionDescription" rows="3" placeholder="Describe the item in detail..." required></textarea>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="startingPrice" class="form-label">Starting Price (₹)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="number" class="form-control" id="startingPrice" min="1" step="1" placeholder="100" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="auctionDuration" class="form-label">Auction Duration</label>
+                                <select class="form-select" id="auctionDuration" required>
+                                    <option value="1">1 day</option>
+                                    <option value="2">2 days</option>
+                                    <option value="3" selected>3 days</option>
+                                    <option value="5">5 days</option>
+                                    <option value="7">7 days</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="auctionImages" class="form-label">Upload Images</label>
+                            <input class="form-control" type="file" id="auctionImages" multiple accept="image/*">
+                            <div class="form-text">Upload clear photos of the item (max 5 images)</div>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                            <label class="form-check-label" for="termsCheck">
+                                I agree to the <a href="#">Auction Terms & Conditions</a>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="auctionForm" class="btn btn-primary">Create Auction</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Logout button functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                window.location.href = 'Edu-Share_login.html';
+            });
+
+            // Auction form submission
+            document.getElementById('auctionForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Here you would typically send the form data to your server
+                alert('Auction created successfully!');
+                // Close the modal
+                var modal = bootstrap.Modal.getInstance(document.getElementById('createAuctionModal'));
+                modal.hide();
+                // Reset the form
+                this.reset();
+            });
+        });
+    </script>
+</body>
+</html>

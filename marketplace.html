@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduShare - Marketplace</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --dark-color: #1b263b;
+            --light-color: #f8f9fa;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --danger-color: #f72585;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: #333;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, var(--dark-color) 0%, #0d1b2a 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+            border-radius: 8px;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: rgba(67, 97, 238, 0.2);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sidebar .nav-link:hover::before, .sidebar .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--accent-color);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+        }
+        
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: white;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+            padding: 15px 20px;
+            border-radius: 12px 12px 0 0 !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 500;
+            padding: 8px 20px;
+            border-radius: 8px;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .search-box {
+            border-radius: 50px;
+            padding-left: 20px;
+            border: 1px solid #e0e0e0;
+            height: 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            object-fit: cover;
+        }
+        
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logout-btn {
+            background: rgba(247, 37, 133, 0.1);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(247, 37, 133, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .logo-container {
+            padding: 0 20px 20px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon {
+            background: var(--accent-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        /* Marketplace Specific Styles */
+        .material-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .material-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.15);
+        }
+        
+        .material-card .card-img-container {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .material-card .card-img-top {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .material-card:hover .card-img-top {
+            transform: scale(1.1);
+        }
+        
+        .material-card .price-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary-color);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            z-index: 2;
+        }
+        
+        .material-card .card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .material-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark-color);
+        }
+        
+        .material-card .card-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .material-card .card-footer {
+            background: transparent;
+            border-top: none;
+            padding: 0 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .material-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 50px;
+        }
+        
+        .view-all-btn {
+            background: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            font-weight: 500;
+            padding: 8px 20px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .view-all-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 15px 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark-color);
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .file-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .file-upload i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 80px;
+                overflow: hidden;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .logo span {
+                display: none;
+            }
+            
+            .material-card .card-img-container {
+                height: 180px;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .material-card .card-img-container {
+                height: 250px;
+            }
+            
+            .modal-dialog {
+                margin: 1rem auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar d-none d-md-block p-0">
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <span>EduShare</span>
+                    </div>
+                </div>
+                <ul class="nav flex-column px-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="Edu-Share.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my_materials.html">
+                            <i class="fas fa-book"></i>
+                            <span>My Materials</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Marketplace</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="auction.html">
+                            <i class="fas fa-gavel"></i>
+                            <span>Auctions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="exchanges.html">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Exchanges</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="community.html">
+                            <i class="fas fa-comments"></i>
+                            <span>Community</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Logout Section -->
+                <div class="sidebar-footer">
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <!-- Top Navbar -->
+                <nav class="navbar navbar-expand-lg mb-4">
+                    <div class="container-fluid">
+                        <div class="d-flex align-items-center">
+                            <div class="position-relative me-3">
+                                <i class="fas fa-bell text-muted fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    3
+                                </span>
+                            </div>
+                            <div class="position-relative me-3">
+                                <i class="fas fa-envelope text-muted fs-5"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                    5
+                                </span>
+                            </div>
+                            <img src="images/pic.jpg" alt="User" class="user-avatar me-2">
+                            <span class="fw-bold">Ak</span>
+                        </div>  
+                    </div>
+                </nav>
+                
+                <!-- Page Heading -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h1 class="h3 mb-0 text-gray-800 fw-bold">Marketplace</h1>
+                        <p class="text-muted">Browse and purchase educational materials from other students</p>
+                    </div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sellMaterialModal">
+                        <i class="fas fa-plus me-2"></i>Sell Your Material
+                    </button>
+                </div>
+                
+                <!-- Search and Filter -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control search-box" placeholder="Search materials...">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select">
+                            <option selected>Filter by category</option>
+                            <option>Textbooks</option>
+                            <option>Lecture Notes</option>
+                            <option>Study Guides</option>
+                            <option>Research Papers</option>
+                            <option>Solved Papers</option>
+                            <option>Reference Books</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Marketplace Materials Grid (3x4) -->
+                <div class="row">
+                    <!-- Material 1 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹350</div>
+                                <img src="images/jee_maths.jpg" class="card-img-top" alt="JEE Mathematics">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">JEE Main Mathematics</h5>
+                                <p class="card-text">By R.D. Sharma - Comprehensive guide for JEE aspirants with solved examples.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-success">Like New</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Material 2 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹250</div>
+                                <img src="images/neet_bio.webp" class="card-img-top" alt="NEET Biology Notes">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">NEET Biology Notes</h5>
+                                <p class="card-text">2023 Edition - Complete syllabus coverage with diagrams and mnemonics.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-warning text-dark">Used</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Material 3 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹450</div>
+                                <img src="images/upsc_his_books.webp" class="card-img-top" alt="UPSC History Book">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">UPSC History Book</h5>
+                                <p class="card-text">NCERT Based - Ancient to Modern History with highlighted important points.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-success">New</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Material 4 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹300</div>
+                                <img src="images/physics_12th.jpg" class="card-img-top" alt="Class 12 Physics">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Class 12 Physics</h5>
+                                <p class="card-text">CBSE Syllabus - With solved examples and derivations.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-warning text-dark">Used</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Material 5 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹200</div>
+                                <img src="images/chemistry_11th.jpg" class="card-img-top" alt="Class 11 Chemistry">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Class 11 Chemistry</h5>
+                                <p class="card-text">NCERT with additional solved problems and concept maps.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-success">Like New</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Material 6 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹180</div>
+                                <img src="images/maths_10th.webp" class="card-img-top" alt="Class 10 Mathematics">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Class 10 Mathematics</h5>
+                                <p class="card-text">CBSE Board - With previous year solved papers and exemplar problems.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-success">New</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Material 7 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹400</div>
+                                <img src="images/gate_cse.webp" class="card-img-top" alt="GATE CSE Notes">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">GATE CSE Notes</h5>
+                                <p class="card-text">Comprehensive notes covering all subjects with important algorithms.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-success">Like New</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Material 8 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹320</div>
+                                <img src="images/cat_quant.jpg" class="card-img-top" alt="CAT Quantitative Aptitude">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">CAT Quantitative Aptitude</h5>
+                                <p class="card-text">Complete guide with shortcut techniques and practice problems.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-warning text-dark">Used</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Material 9 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹280</div>
+                                <img src="images/english_grammar.jpg" class="card-img-top" alt="English Grammar Guide">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">English Grammar Guide</h5>
+                                <p class="card-text">For competitive exams with practice exercises and vocabulary builder.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-success">New</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Material 10 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹380</div>
+                                <img src="images/medical_entrance.jpg" class="card-img-top" alt="Medical Entrance Guide">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Medical Entrance Guide</h5>
+                                <p class="card-text">Physics, Chemistry, Biology complete syllabus with MCQs.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-success">Like New</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Material 11 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹220</div>
+                                <img src="images/accountancy.jpg" class="card-img-top" alt="Accountancy Class 12">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Accountancy Class 12</h5>
+                                <p class="card-text">CBSE Syllabus with solved problems and practice questions.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-warning text-dark">Used</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Material 12 -->
+                    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                        <div class="card material-card h-100">
+                            <div class="card-img-container">
+                                <div class="price-tag">₹420</div>
+                                <img src="images/law_entrance.jpg" class="card-img-top" alt="Law Entrance Guide">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Law Entrance Guide</h5>
+                                <p class="card-text">Complete preparation material for CLAT and other law entrance exams.</p>
+                            </div>
+                            <div class="card-footer">
+                                <span class="material-badge bg-success">New</span>
+                                <button class="btn btn-sm btn-primary">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sell Material Modal -->
+    <div class="modal fade" id="sellMaterialModal" tabindex="-1" aria-labelledby="sellMaterialModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sellMaterialModalLabel">Sell Your Material</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="materialForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="materialTitle" class="form-label">Title</label>
+                                <input type="text" class="form-control" id="materialTitle" placeholder="e.g., JEE Main Mathematics Guide" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="materialCategory" class="form-label">Category</label>
+                                <select class="form-select" id="materialCategory" required>
+                                    <option value="" selected disabled>Select category</option>
+                                    <option>Textbooks</option>
+                                    <option>Lecture Notes</option>
+                                    <option>Study Guides</option>
+                                    <option>Research Papers</option>
+                                    <option>Solved Papers</option>
+                                    <option>Reference Books</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="materialDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="materialDescription" rows="3" placeholder="Describe your material in detail..." required></textarea>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="materialPrice" class="form-label">Price (₹)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="number" class="form-control" id="materialPrice" min="1" step="1" placeholder="250" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="materialCondition" class="form-label">Condition</label>
+                                <select class="form-select" id="materialCondition" required>
+                                    <option value="" selected disabled>Select condition</option>
+                                    <option>New</option>
+                                    <option>Like New</option>
+                                    <option>Used - Good</option>
+                                    <option>Used - Fair</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Upload Images</label>
+                            <div class="file-upload" id="fileUploadArea">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drag & drop images here or click to browse</p>
+                                <input type="file" id="materialImages" multiple accept="image/*" style="display: none;">
+                            </div>
+                            <div id="imagePreviews" class="mt-3"></div>
+                            <div class="form-text">Upload clear photos of the material (max 5 images)</div>
+                        </div>
+                        
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                            <label class="form-check-label" for="termsCheck">
+                                I agree to the <a href="#">Marketplace Terms & Conditions</a>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="materialForm" class="btn btn-primary">List Material</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Logout button functionality
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                window.location.href = 'Edu-Share_login.html';
+            });
+            
+            // File upload functionality
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            const fileInput = document.getElementById('materialImages');
+            const imagePreviews = document.getElementById('imagePreviews');
+            
+            fileUploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', function(e) {
+                imagePreviews.innerHTML = '';
+                const files = e.target.files;
+                
+                if (files.length > 5) {
+                    alert('You can upload a maximum of 5 images');
+                    return;
+                }
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (!file.type.match('image.*')) continue;
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.classList.add('preview-image');
+                        imagePreviews.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Drag and drop functionality
+            fileUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--primary-color)';
+                this.style.backgroundColor = 'rgba(67, 97, 238, 0.05)';
+            });
+            
+            fileUploadArea.addEventListener('dragleave', function() {
+                this.style.borderColor = '#e0e0e0';
+                this.style.backgroundColor = 'transparent';
+            });
+            
+            fileUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = '#e0e0e0';
+                this.style.backgroundColor = 'transparent';
+                
+                fileInput.files = e.dataTransfer.files;
+                const event = new Event('change');
+                fileInput.dispatchEvent(event);
+            });
+            
+            // Form submission
+            document.getElementById('materialForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Here you would typically send the form data to your server
+                alert('Material listed successfully!');
+                // Close the modal
+                var modal = bootstrap.Modal.getInstance(document.getElementById('sellMaterialModal'));
+                modal.hide();
+                // Reset the form
+                this.reset();
+                imagePreviews.innerHTML = '';
+            });
+        });
+    </script>
+</body>
+</html>

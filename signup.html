@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduShare - Sign Up</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3f37c9;
+            --accent: #4895ef;
+            --dark: #1b263b;
+            --light: #f8f9fa;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .signup-card {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .signup-hero {
+            background: linear-gradient(135deg, var(--dark) 0%, #0d1b2a 100%);
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .signup-hero h2 {
+            font-weight: 700;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-icon {
+            background: rgba(255, 255, 255, 0.1);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--accent);
+        }
+        
+        .signup-form-container {
+            background: white;
+            padding: 3rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo-icon {
+            background: var(--accent);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+        }
+        
+        .user-type-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .user-type-btn:hover {
+            border-color: var(--primary);
+        }
+        
+        .user-type-btn.active {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .user-type-btn i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .form-control {
+            height: 3rem;
+            border-radius: 10px;
+            padding-left: 1rem;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+        }
+        
+        .password-strength {
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            height: 3rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: #6c757d;
+        }
+        
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .divider::before {
+            margin-right: 1rem;
+        }
+        
+        .divider::after {
+            margin-left: 1rem;
+        }
+        
+        .social-btn {
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        .bg-google {
+            background: #DB4437;
+        }
+        
+        .bg-facebook {
+            background: #3B5998;
+        }
+        
+        .bg-linkedin {
+            background: #0077B5;
+        }
+        
+        .terms-text {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+        
+        .terms-text a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .terms-text a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 991.98px) {
+            .signup-hero {
+                padding: 2rem;
+            }
+            
+            .signup-form-container {
+                padding: 2rem;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .signup-hero {
+                display: none;
+            }
+            
+            body {
+                padding: 1rem;
+                background: white;
+            }
+            
+            .signup-card {
+                box-shadow: none;
+            }
+            
+            .user-type-selector {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .user-type-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row signup-card">
+            <!-- Left Side - Hero Section -->
+            <div class="col-lg-6 signup-hero d-none d-lg-block">
+                <h2 class="mb-4">Join EduShare Community</h2>
+                <p class="mb-4">Create your account to buy, sell, or exchange study materials with students across India.</p>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div>Access thousands of affordable study resources</div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-rupee-sign"></i>
+                    </div>
+                    <div>Earn money by selling your unused materials</div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>Connect with peers preparing for same exams</div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div>Contribute to sustainable education practices</div>
+                </div>
+            </div>
+            
+            <!-- Right Side - Signup Form -->
+            <div class="col-lg-6 signup-form-container">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h4 class="m-0">EduShare</h4>
+                </div>
+                
+                <h4 class="mb-4">Create Your Account</h4>
+                
+                <form>
+                    <!-- User Type Selection -->
+                    <div class="d-flex gap-3 mb-4 user-type-selector">
+                        <div class="user-type-btn active" onclick="selectUserType(this, 'student')">
+                            <i class="fas fa-user-graduate"></i>
+                            <div>Student</div>
+                        </div>
+                        <div class="user-type-btn" onclick="selectUserType(this, 'tutor')">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <div>Tutor</div>
+                        </div>
+                        <div class="user-type-btn" onclick="selectUserType(this, 'institute')">
+                            <i class="fas fa-school"></i>
+                            <div>Institute</div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="userType" name="userType" value="student">
+                    
+                    <!-- Name Fields -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+                                <label for="firstName">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
+                                <label for="lastName">Last Name</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="email" placeholder="Email Address" required>
+                            <label for="email">Email Address</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Phone -->
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="tel" class="form-control" id="phone" placeholder="Phone Number" required>
+                            <label for="phone">Phone Number</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="password" placeholder="Password" required oninput="updatePasswordStrength()">
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="password-strength">
+                            <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                        </div>
+                        <small class="text-muted">Use 8+ characters with mix of letters, numbers & symbols</small>
+                    </div>
+                    
+                    <!-- Confirm Password -->
+                    <div class="mb-4">
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+                            <label for="confirmPassword">Confirm Password</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Terms Checkbox -->
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="terms" required>
+                        <label class="form-check-label terms-text" for="terms">
+                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                        </label>
+                    </div>
+                    
+                    <!-- Sign Up Button -->
+                    <button type="submit" class="btn btn-primary w-100 mb-3">
+                        Create Account
+                    </button>
+                    
+                    <!-- Divider -->
+                    <div class="divider">
+                        or sign up with
+                    </div>
+                    
+                    <!-- Social Buttons -->
+                    <div class="d-flex justify-content-center gap-3 mb-4">
+                        <button type="button" class="social-btn bg-google">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button type="button" class="social-btn bg-facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button type="button" class="social-btn bg-linkedin">
+                            <i class="fab fa-linkedin-in"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Login Link -->
+                    <div class="text-center">
+                        <p class="text-muted">Already have an account? <a href="Edu-share_login.html" class="text-primary">Sign In</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function selectUserType(element, type) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.user-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button
+            element.classList.add('active');
+            
+            // Update hidden input value
+            document.getElementById('userType').value = type;
+        }
+        
+        function updatePasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthBar = document.getElementById('passwordStrengthBar');
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 25;
+            if (password.length >= 12) strength += 25;
+            
+            // Complexity checks
+            if (password.match(/[a-z]/))  strength += 10;
+            if (password.match(/[A-Z]/)) strength += 10;
+            if (password.match(/[0-9]/)) strength += 15;
+            if (password.match(/[^a-zA-Z0-9]/)) strength += 15;
+            
+            // Cap at 100
+            strength = Math.min(strength, 100);
+            
+            // Update UI
+            strengthBar.style.width = strength + '%';
+            
+            // Change color based on strength
+            if (strength < 40) {
+                strengthBar.style.backgroundColor = '#dc3545'; // Red
+            } else if (strength < 70) {
+                strengthBar.style.backgroundColor = '#fd7e14'; // Orange
+            } else {
+                strengthBar.style.backgroundColor = '#28a745'; // Green
+            }
+        }
+    </script>
+</body>
+</html>

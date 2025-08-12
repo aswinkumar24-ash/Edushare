@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduShare - Forgot Password</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --dark-color: #1b263b;
+            --light-color: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .password-container {
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+        
+        .password-header {
+            background: linear-gradient(135deg, var(--dark-color) 0%, #0d1b2a 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .password-header h2 {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .password-header p {
+            opacity: 0.9;
+            margin-bottom: 0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .password-body {
+            padding: 40px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-icon {
+            background: var(--accent-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: white; /* Changed to white for better visibility */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Added shadow for better contrast */
+        }
+        
+        .form-control {
+            height: 50px;
+            border-radius: 10px;
+            padding-left: 20px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .form-floating label {
+            padding-left: 20px;
+            color: #6c757d;
+        }
+        
+        .btn-submit {
+            background-color: var(--primary-color);
+            border: none;
+            height: 50px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .back-to-login {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-to-login a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-login a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+        
+        .instruction-box {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .instruction-box p {
+            margin-bottom: 0;
+            color: #6c757d;
+        }
+        
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
+        
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.875em;
+            margin-top: 0.25rem;
+        }
+        
+        @media (max-width: 767.98px) {
+            body {
+                padding: 20px;
+            }
+            
+            .password-container {
+                border-radius: 20px;
+            }
+            
+            .password-body {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="password-container">
+            <!-- Header Section -->
+            <div class="password-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="logo-text">EduShare</div>
+                </div>
+                <h2>Forgot Password?</h2>
+                <p>Enter your email to reset your password</p>
+            </div>
+            
+            <!-- Body Section -->
+            <div class="password-body">
+                <div class="instruction-box">
+                    <p><i class="fas fa-info-circle me-2"></i>We'll send you a link to reset your password. Please check your inbox and follow the instructions.</p>
+                </div>
+                
+                <form id="forgotPasswordForm" novalidate>
+                    <div class="form-floating mb-4">
+                        <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                        <label for="email">Email address</label>
+                        <div class="invalid-feedback">
+                            Please enter a valid email address.
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-submit mb-3">Send Reset Link</button>
+                    
+                    <div class="back-to-login">
+                        Remember your password? <a href="Edu-share_login.html">Sign in</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript for form validation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('forgotPasswordForm');
+            
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                // Check form validity
+                if (!form.checkValidity()) {
+                    form.classList.add('was-validated');
+                    return;
+                }
+                
+                // If form is valid, show success message (in a real app, you would send the reset link)
+                alert('Password reset link has been sent to your email!');
+            });
+            
+            // Add real-time validation feedback
+            const emailInput = document.getElementById('email');
+            
+            emailInput.addEventListener('input', function() {
+                if (emailInput.validity.valid) {
+                    emailInput.classList.remove('is-invalid');
+                } else {
+                    emailInput.classList.add('is-invalid');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
